@@ -1,47 +1,66 @@
-!/usr/bin/python3
+#!/usr/bin/python3
 
 import uuid
 from datetime import datetime
 from models import storage
 
-class BaseModels:
+class BaseModel:
     """class from which all other classes will inherit"""
 
-    def __int__(self, *args, **kwargs):
-    """ ïnitiales intances attributes
+    def __init__(self, *args, **kwargs):
+    """ initializes intances attributes
 
     Args:
-        *aegs: list of arguements
+        *args: list of arguements
         **kwargs: dict of key-value arguments
-        """
+    """
 
-        if kwargs is not None and kwargs != {}:
-        for key in kwargs:
-            if key == "created_at":
-                self.__dict__["created_at"] = datetime.strptime(kwargs["created_at"], "%y-%m-%dt%H:%M:%S.%f"
-                        elif key == "updated_at":
-                        self.__dict__["updated_at"] = datetime.strptime(kwargs["update_at"], "%Y-%m-%dT%H:%M:%S.%f"
-                            elif key == "id":
-                            self.__dict__[key] = kwargs[key]
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    setattr(self, key, datetime.strptime(value, "%y-%m-%dt%H:%M:%S.%f"
+                elif key != '__class__':
+                    setattr(self, key, value)
 
         else:
-            self.id =str(uuid4))
+            self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
-            self.update_at = datetime.now()
+            self.update_at = self.created_at
             storage.new(self)
 
-            def __str__(self):
+    def __str__(self):
+        class_name = "[" + self.__class__.__name__ + "]"
+        dct = {k: v for (k, v) in self.__dict__.items() if v is not None}
+        return class_name + " (" + self.id + ") " + str(dct)
 
             return "[{}] ({}) {}".format(type(self).__name, self.id, self.__dict__)
 
-            def save(self):
-            self.update_at = datetime.now()
-            storage.save()
+    def save(self):
+        self.update_at = datetime.now()
+        storage.save()
 
-            def to_dict(self)
+    def to_dict(self):
+        new_dict = {}
+        for key, value in self.__dict__.items():
+            if key == "created_at" or key == "updated_at":
+                new_dict[key] = value.strftime("%Y-%m-%dT%H:%M:%S.%f")
+            else:
+                if value is not None:
+                    new_dict[key] = value
+        new_dict['__class__'] = self.__class__.__name
 
-            my_dict = self.__dict__.copy()
-            my_dict["__class__"] = type(self).__name__
-            my_dict["created_at"] = my_dict["created_at"].isoformat()
-            
+    def from_dict(cls, dict_rep):
+        """Creates an instance from a dirctionary representation.
 
+        Args:
+            cls: The class of the instance to create.
+            dict_rep: A dictionary representation of the instance.
+
+        Returns:
+            A new instance of the class with attributes from the dictionary.
+        """
+        if '__class__' in dict_rep:
+            class_name = dict_rep[ '__class__']
+            if cls.__name__ == class_name:
+                return cls(**dict_rep)
+        return None

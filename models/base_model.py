@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from models import storage
 
-class BaseModels:
+class BaseModel:
     """class from which all other classes will inherit"""
 
     def __init__(self, *args, **kwargs):
@@ -15,19 +15,17 @@ class BaseModels:
         **kwargs: dict of key-value arguments
     """
 
-        if kwargs is not None and kwargs != {}:
-            for key in kwargs:
-                if key == "created_at":
-                    self.__dict__["created_at"] = datetime.strptime(kwargs["created_at"], "%y-%m-%dt%H:%M:%S.%f"
-                elif key == "updated_at":
-                    self.__dict__["updated_at"] = datetime.strptime(kwargs["update_at"], "%Y-%m-%dT%H:%M:%S.%f"
-                elif key == "id":
-                    self.__dict__[key] = kwargs[key]
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    setattr(self, key, datetime.strptime(value, "%y-%m-%dt%H:%M:%S.%f"
+                elif key != '__class__':
+                    setattr(self, key, value)
 
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
-            self.update_at = datetime.now()
+            self.update_at = self.created_at
             storage.new(self)
 
     def __str__(self):
@@ -50,4 +48,19 @@ class BaseModels:
                 if value is not None:
                     new_dict[key] = value
         new_dict['__class__'] = self.__class__.__name
-        return new_dict
+
+    def from_dict(cls, dict_rep):
+        """Creates an instance from a dirctionary representation.
+
+        Args:
+            cls: The class of the instance to create.
+            dict_rep: A dictionary representation of the instance.
+
+        Returns:
+            A new instance of the class with attributes from the dictionary.
+        """
+        if '__class__' in dict_rep:
+            class_name = dict_rep[ '__class__']
+            if cls.__name__ == class_name:
+                return cls(**dict_rep)
+        return None

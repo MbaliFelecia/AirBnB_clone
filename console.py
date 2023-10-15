@@ -27,7 +27,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb)"
 
     '''def do_create(self, arg):
-        """Creates a new instance of BaseModel and 
+        """Creates a new instance of BaseModel and
         print id """
         args = arg.split(" ")
         if len(arg) == 0:
@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_show(self, arg=""):
-        """ Prints the string representtation of 
+        """ Prints the string representtation of
         an instance based  on the class name and id"""
         args = arg.split(" ")
         if len(args) == 0:
@@ -134,8 +134,10 @@ class HBNBCommand(cmd.Cmd):
         """ EOF SystemExit """
         print("")
         return True
+
     def emptyline(self):
         pass
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

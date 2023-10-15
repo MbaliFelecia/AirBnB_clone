@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Class BaseModel defines common attributes/methods for classes"""
 
 import uuid
 from datetime import datetime
@@ -29,6 +30,8 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
+        """ Prints strings representing class """
+
         class_name = "[" + self.__class__.__name__ + "]"
         dct = {k: v for (k, v) in self.__dict__.items() if v is not None}
         return class_name + " (" + self.id + ") " + str(dct)
@@ -36,10 +39,15 @@ class BaseModel:
             return "[{}] ({}) {}".format(type(self).__name, self.id, self.__dict__)
 
     def save(self):
+        """ Update public instances attribute update_at with
+        current datetime"""
+
         self.update_at = datetime.now()
         storage.save()
 
     def to_dict(self):
+        """ Returns dictionary containing all keys/values """
+
         new_dict = {}
         for key, value in self.__dict__.items():
             if key == "created_at" or key == "updated_at":

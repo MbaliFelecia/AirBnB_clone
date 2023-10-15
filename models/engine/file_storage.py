@@ -7,25 +7,33 @@ import json
 import os
 
 class FileStorage:
-    """ Class that serializes and deserializes JSON objects """
-    __file_path = "file.json"
+    """ Class FileStorage that serializes and deserializes JSON objects """
+
+    __file_path = 'file.json'
     __objects = {}
 
 
     def all(self):
-        """  class that serializes and deserializes JSON objects """
+        """ Returns the dictionary __objects """
         return FileStorage.__objects
 
     def new(self, obj):
-        key = f"{obj.__class__.__name__}.{obj.id}"
+        """ Set in __objects the obj with key <obj class name>.id """
+        key = "{0}.{1}".format(obj.__class__.__name__, obj.id)
         FileStorage.__objects[key] = obj 
 
     def save(self):
-        obj_dict = {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
-        with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
-            json.dump(obj_dict, file, ensure_ascii=False)
+        """ Serializes __objects to JSON file __file_path """
+        obj_dict = {}
+        for key, value in FileStorage.__objects.items():
+            obj_dict[key] = value.to_dict()
+        with open(FileStorage.__file_path, 'w') as f:
+            json.dump(obj_dict, f)
 
     def reload(self):
+        """ Deserializes the JSON file to __object if __file_path exists
+        otherwise does nothing, with no exception being reaised """
+
         if os.path.exists(FileStorage.__file_path):
             with open(FileStorage.__file_path, 'r', encoding='utf-8' as file:
                     obj_dict = json.load(file)

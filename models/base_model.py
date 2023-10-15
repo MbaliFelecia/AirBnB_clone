@@ -9,17 +9,16 @@ class BaseModel:
     """class from which all other classes will inherit"""
 
     def __init__(self, *args, **kwargs):
-    """ initializes intances attributes
-
-    Args:
-        *args: list of arguements
-        **kwargs: dict of key-value arguments
-    """
+        """ initializes intances attributes
+        Args:
+            *args: list of arguements
+            **kwargs: dict of key-value arguments
+        """
 
         if kwargs:
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
-                    setattr(self, key, datetime.strptime(value, "%y-%m-%dt%H:%M:%S.%f"
+                    setattr(self, key, datetime.strptime(value, "%y-%m-%dt%H:%M:%S.%f"))
                 elif key != '__class__':
                     setattr(self, key, value)
 
@@ -36,39 +35,42 @@ class BaseModel:
         dct = {k: v for (k, v) in self.__dict__.items() if v is not None}
         return class_name + " (" + self.id + ") " + str(dct)
 
-            return "[{}] ({}) {}".format(type(self).__name, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(type(self).__name, self.id, self.__dict__)
 
     def save(self):
         """ Update public instances attribute update_at with
         current datetime"""
 
         self.update_at = datetime.now()
-        storage.save()
+        '''storage.save()'''
 
     def to_dict(self):
         """ Returns dictionary containing all keys/values """
 
-        new_dict = {}
+        obj_dict = {}
         for key, value in self.__dict__.items():
             if key == "created_at" or key == "updated_at":
-                new_dict[key] = value.strftime("%Y-%m-%dT%H:%M:%S.%f")
+                obj_dict[key] = value.strftime("%Y-%m-%dT%H:%M:%S.%f")
             else:
-                if value is not None:
-                    new_dict[key] = value
-        new_dict['__class__'] = self.__class__.__name
+                if not value:
+                    pass
+                else:
+                    obj_dict[key] = value
+        '''obj_dict['__class__'] = self.__class__.__name'''
+        return obj_dict
 
-    def from_dict(cls, dict_rep):
-        """Creates an instance from a dirctionary representation.
+    '''def from_dict(cls, dict_rep):
+       """Creates an instance from a dirctionary representation.
 
         Args:
             cls: The class of the instance to create.
             dict_rep: A dictionary representation of the instance.
 
-        Returns:
-            A new instance of the class with attributes from the dictionary.
-        """
+       Returns:
+           A new instance of the class with attributes from the dictionary.
+       """
         if '__class__' in dict_rep:
-            class_name = dict_rep[ '__class__']
-            if cls.__name__ == class_name:
-                return cls(**dict_rep)
-        return None
+           class_name = dict_rep[ '__class__']
+           if cls.__name__ == class_name:
+               return cls(**dict_rep)'''
+

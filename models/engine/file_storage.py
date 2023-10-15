@@ -28,14 +28,14 @@ class FileStorage:
         for key, value in FileStorage.__objects.items():
             obj_dict[key] = value.to_dict()
         with open(FileStorage.__file_path, 'w') as f:
-            json.dump(obj_dict, f)
+            '''json.dump(obj_dict, f)'''
 
     def reload(self):
         """ Deserializes the JSON file to __object if __file_path exists
         otherwise does nothing, with no exception being reaised """
 
         if os.path.exists(FileStorage.__file_path):
-            with open(FileStorage.__file_path, 'r', encoding='utf-8' as file:
+            with open(FileStorage.__file_path, 'r') as file:
                     obj_dict = json.load(file)
                     for key,obj_data in obj_dict.items():
                         class_name, obj_id = key.split('.')

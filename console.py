@@ -25,15 +25,6 @@ class HBNBCommand(cmd.Cmd):
     """ Command processor"""
 
     prompt = "(hbnb)"
-    def do_quit(self, arg):
-        """Quit command to exit the program"""
-        return True
-
-    def do_EOF(self, arg):
-        """Quit command to exit the program"""
-        print()
-        return True
-
 
     '''def do_create(self, arg):
         """Creates a new instance of BaseModel and 
@@ -134,6 +125,17 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
         else:
             print("** class doesn't exist **")'''
+
+    def do_quit(self, args):
+        """ Quit command to exit the program \n """
+        sys.exit(1)
+
+    def do_EOF(self, arg):
+        """ EOF SystemExit """
+        print("")
+        return True
+    def emptyline(self):
+        pass
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

@@ -47,14 +47,9 @@ class FileStorage:
                    "Place": Place,
                    "Review": Review,
                    "State": State,
-                   "User": User} '''
+                   "User": User}'''
 
-        if os.path.exists(FileStorage.__file_path):
+        if os.path.exists(FileStorage.__file_path) is True:
             with open(FileStorage.__file_path, 'r') as file:
-                    obj_dict = json.load(file)
-                    for key,obj_data in obj_dict.items():
-                        class_name, obj_id = key.split('.')
-                        obj_cls = globals().get(class_name)
-                        if obj_cls:
-                            obj = obj_cls(**obj_data)
-                            self.new(obj) 
+                    '''for key, value in json.load(file).items():
+                        self.new(dct[value['__class__']](**value))''' 

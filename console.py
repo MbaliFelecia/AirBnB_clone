@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ import cmd module, BaseModel and storage """
 import cmd
-from models.base_model import BaseModel
+'''from models.base_model import BaseModel
 from models import storage
 from models.user import User
 from models.place import Place
@@ -18,15 +18,24 @@ list_classes = ["BaseModel",
                 "City",
                 "Amenity",
                 "Review",
-                "Place"]
+                "Place"]'''
 
 
 class HBNBCommand(cmd.Cmd):
     """ Command processor"""
 
     prompt = "(hbnb)"
+    def do_quit(self, arg):
+        """Quit command to exit the program"""
+        return True
 
-    def do_create(self, arg):
+    def do_EOF(self, arg):
+        """Quit command to exit the program"""
+        print()
+        return True
+
+
+    '''def do_create(self, arg):
         """Creates a new instance of BaseModel and 
         print id """
         args = arg.split(" ")
@@ -46,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split(" ")
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] list_classes:
+        elif args[0] in list_classes:
             if len(args) >= 2:
                 name_id = args[0] + "." + str(args[1])
                 objs = storage.all()
@@ -119,12 +128,12 @@ class HBNBCommand(cmd.Cmd):
                         try:
                             setattr(obj, args[2], eval(args[3].strip('"')))
                         except:
-                            setattr(obj, args[2], args[3].strip('"')))
+                            setattr(obj, args[2], args[3].strip('"'))
                         storage.save()
             else:
                 print("** no instance found **")
         else:
-            print("** class doesn't exist **")
+            print("** class doesn't exist **")'''
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

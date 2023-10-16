@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 from models import storage
 
+
 class BaseModel:
     """class from which all other classes will inherit"""
 
@@ -16,11 +17,10 @@ class BaseModel:
         """
 
         if kwargs:
-            '''f = %Y-%m-%dT%H:%M:%S.%f'''
+            f = "%Y-%m-%dT%H:%M:%S.%f"
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
-                    value = datetime.strptime(kwargs[key], '%Y-%m-%dT%H:%M:%S.%f')
-                    '''setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))'''
+                    value = datetime.strptime(kwargs[key], f)
                 elif key != '__class__':
                     setattr(self, key, value)
 
@@ -54,4 +54,3 @@ class BaseModel:
         __dict__['created_at'] = self.created_at.isoformat()
         __dict__['updated_at'] = self.updated_at.isoformat()
         return __dict__
-

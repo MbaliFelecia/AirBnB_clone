@@ -16,16 +16,18 @@ class BaseModel:
         """
 
         if kwargs:
+            '''f = %Y-%m-%dT%H:%M:%S.%f'''
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
-                    setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
+                    value = datetime.strptime(kwargs[key], '%Y-%m-%dT%H:%M:%S.%f')
+                    '''setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))'''
                 elif key != '__class__':
                     setattr(self, key, value)
 
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
-            self.update_at = self.created_at
+            self.updated_at = self.created_at
             storage.new(self)
 
     def __str__(self):

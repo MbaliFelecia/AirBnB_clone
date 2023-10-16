@@ -47,30 +47,9 @@ class BaseModel:
     def to_dict(self):
         """ Returns dictionary containing all keys/values """
 
-        obj_dict = {}
-        for key, value in self.__dict__.items():
-            if key == "created_at" or key == "updated_at":
-                obj_dict[key] = value.strftime("%Y-%m-%dT%H:%M:%S.%f")
-            else:
-                if not value:
-                    pass
-                else:
-                    obj_dict[key] = value
-        '''obj_dict['__class__'] = self.__class__.__name'''
-        return obj_dict
-
-    '''def from_dict(cls, dict_rep):
-       """Creates an instance from a dirctionary representation.
-
-        Args:
-            cls: The class of the instance to create.
-            dict_rep: A dictionary representation of the instance.
-
-       Returns:
-           A new instance of the class with attributes from the dictionary.
-       """
-        if '__class__' in dict_rep:
-           class_name = dict_rep[ '__class__']
-           if cls.__name__ == class_name:
-               return cls(**dict_rep)'''
+        __dict__ = dict(self.__dict__)
+        __dict__['__class__'] = type(self).__name__
+        __dict__['created_at'] = self.created_at.isoformat()
+        __dict__['updated_at'] = self.updated_at.isoformat()
+        return __dict__
 

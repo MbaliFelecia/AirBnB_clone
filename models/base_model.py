@@ -44,7 +44,7 @@ class BaseModel:
         current datetime"""
 
         self.updated_at = datetime.now()
-        '''storage.save()'''
+        storage.save()
 
     def to_dict(self):
         """ Returns dictionary containing all keys/values """
